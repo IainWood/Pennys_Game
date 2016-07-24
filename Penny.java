@@ -37,7 +37,7 @@ public class Penny{
                     System.out.println("Enter a sequence of three flips (H-Heads, T-Tails)");
                     playerSeq = scan.nextLine();
                     if (!verifyString(playerSeq)) {
-                        System.out.println("--ERROR: make sure that you type a sequence of three letters,\n only 'H's or 'T's with no spaces.--");
+                        System.err.println("--ERROR: make sure that you type a sequence of three letters,\n only 'H's or 'T's with no spaces.--");
                         playerSeq = "XXX";
                         notDone = true;
                         continue;
@@ -46,7 +46,7 @@ public class Penny{
                     System.out.println("First player to reach how many wins:");
                     numOfWins = scan.nextInt();
                     if (!verifyInteger(numOfWins)) {
-                        System.out.println("--ERROR: make sure that the number is positive--");
+                        System.err.println("--ERROR: make sure that the number is positive--");
                         notDone = true;
                         continue;
                     } //Resets the loop if the int is dirty
@@ -56,7 +56,7 @@ public class Penny{
 
                     //Between 1 million and 100 million iterations
                     if(numOfGames > 1000000 && numOfGames < 100000000){
-                        System.out.println("WARNING: this calculation will take some time\n" +
+                        System.err.println("WARNING: this calculation will take some time\n" +
                                 " it is not recommended. Would you like to continue(y/n)?");
                         cancelOperation = scan.next();
                         if(!cancelOperation.equalsIgnoreCase("y")){
@@ -64,7 +64,7 @@ public class Penny{
                         }
                     //Between 100 million and 1 billion iterations
                     }else if(numOfGames >= 100000000 && numOfGames < 1000000000){
-                        System.out.println("WARNING: this calculation will take considerable time\n" +
+                        System.err.println("WARNING: this calculation will take considerable time\n" +
                                 " it is not recommended. Would you like to continue(y/n)?");
                         cancelOperation = scan.next();
                         if(!cancelOperation.equalsIgnoreCase("y")){
@@ -72,7 +72,7 @@ public class Penny{
                         }
                     //Excess of 1 billion
                     }else if(numOfGames >= 1000000000){
-                        System.out.println("WARNING: this calculation will take a very long time,\n" +
+                        System.err.println("WARNING: this calculation will take a very long time,\n" +
                                 " it is highly not recommended. Would you like to continue(y/n)?");
                         cancelOperation = scan.next();
                         System.out.println("ARE YOU SURE!");
@@ -83,12 +83,12 @@ public class Penny{
                     }
 
                     if (!verifyInteger(numOfGames)) {
-                        System.out.println("--ERROR: make sure that the number is positive--");
+                        System.err.println("--ERROR: make sure that the number is positive--");
                         notDone = true;
                         continue;
                     }
                 } catch (InputMismatchException missMatch) {
-                    System.out.println("--ERROR: make sure that you type letters for the first question\nand numbers for the next two--");
+                    System.err.println("--ERROR: make sure that you type letters for the first question\nand numbers for the next two--");
                 }
 
                 //Converts to uppercase and trims, everything should be uppercase past this point
