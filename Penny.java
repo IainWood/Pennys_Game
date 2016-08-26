@@ -4,9 +4,25 @@
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.InputMismatchException;
+import static java.lang.Math.toIntExact;
 import java.util.Scanner;
 import java.util.Random;
 
+
+/**
+ * Premise:
+ *      If a person picks a sequence of three outcomes of a coin toss (Heads or Tails) then there
+ *      exists another sequence that has a better chance of occurring in a string of random coin
+ *      tosses. This program was inspired by this Numberphile video: https://www.youtube.com/watch?v=Sa9jLWKrX0c
+ *
+ * Implementation:
+ *      The program asks the user to choose any sequence of coin tosses of length three, then
+ *      the computer takes that sequence and creates a better one. The user is also asked how
+ *      many times they would like to run the program and how many wins they must achieve in
+ *      order to win. The user The computer then begins generating a sequence of random tosses
+ *      and compares the number of times that the users sequence appears and how many times the
+ *      auto-generated one appears.
+ */
 public class Penny{
 
     //Timer variables used to calculate the elapsed time of the game
@@ -25,8 +41,8 @@ public class Penny{
         //Placeholder for playAgain, makes sure that the answer is yes
         String playAgain = "y";
 
-        //Repeats while user answers 'yes' or 'y' to playing again, yes by default
-         while(playAgain.equalsIgnoreCase("yes") || playAgain.equalsIgnoreCase("y")) {
+        //Repeats while user answers 'yes' or 'y' to playing again, the variable playAgain is yes by default
+        while(playAgain.equalsIgnoreCase("yes") || playAgain.equalsIgnoreCase("y")) {
 
             String playerSeq = "XXX";
             String cancelOperation;
@@ -73,7 +89,7 @@ public class Penny{
                     //Between 1 million and 100 million iterations
                     if(numOfGames > 1000000 && numOfGames < 100000000){
                         System.err.println("WARNING: this calculation will take some time\n" +
-                                           "it is not recommended. Would you like to continue(y/n)?");
+                                "it is not recommended. Would you like to continue(y/n)?");
 
                         //Makes sure that the above line is printed out BEFORE continuing
                         Thread.sleep(10);
@@ -84,7 +100,7 @@ public class Penny{
                         //Between 100 million and 1 billion iterations
                     }else if(numOfGames >= 100000000 && numOfGames < 1000000000){
                         System.err.println("WARNING: this calculation will take considerable time\n" +
-                                           "it is not recommended. Would you like to continue(y/n)?");
+                                "it is not recommended. Would you like to continue(y/n)?");
 
                         //Makes sure that the above line is printed out BEFORE continuing
                         Thread.sleep(10);
@@ -95,7 +111,7 @@ public class Penny{
                         //Excess of 1 billion
                     }else if(numOfGames >= 1000000000){
                         System.err.println("WARNING: this calculation will take a very long time,(excess of 10 minutes if win limit is 1)\n" +
-                                           "it is highly not recommended. Would you like to continue(y/n)?");
+                                "it is highly not recommended. Would you like to continue(y/n)?");
 
                         //Makes sure that the above line is printed out BEFORE continuing
                         Thread.sleep(10);
@@ -279,27 +295,33 @@ public class Penny{
         int totalGames = playerWins + computerWins;
         long elapsedTime = endTime - startTime;
 
-        //Intentional integer division to get whole number
-        //MILLIS_IN_SEC = 1000
-        int seconds = (int)elapsedTime / MILLIS_IN_SEC;
+        try {
+            //Intentional integer division to get whole number
+            //MILLIS_IN_SEC = 1000
+            int seconds = toIntExact(elapsedTime) / MILLIS_IN_SEC;
 
-        //Intentional integer division to get whole number
-        //SEC_IN_MIN = 60
-        int minutes = seconds / SEC_IN_MIN;
+            //Intentional integer division to get whole number
+            //SEC_IN_MIN = 60
+            int minutes = seconds / SEC_IN_MIN;
 
-        if(seconds > SEC_IN_MIN){
-            seconds %= SEC_IN_MIN;
+            if (seconds > SEC_IN_MIN) {
+                seconds %= SEC_IN_MIN;
+            }
+
+            //Calculates the milliseconds elapsed
+            int milliseconds = toIntExact(elapsedTime) - ((seconds * MILLIS_IN_SEC) + (minutes * SEC_IN_MIN));
+
+            System.out.println("---Results---");
+            System.out.println("Total games: " + totalGames);
+            System.out.println("Player game wins: " + playerWins);
+            System.out.println("Computer game wins: " + computerWins);
+            System.out.println("Player won " + formatter.format((double) playerWins / totalGames) + "%");
+            System.out.println("Computer won " + formatter.format((double)computerWins/totalGames) + "%");
+            System.out.println("Elapsed time: \nMinutes: " + minutes + "\nSeconds: " + seconds + "\nMilliseconds: " + milliseconds);
+
+        }catch (ArithmeticException e) {
+            System.out.println("Error: Elapsed time too long");
         }
-
-        int milliseconds = (int)elapsedTime - ((seconds * MILLIS_IN_SEC) + (minutes * SEC_IN_MIN));
-
-        System.out.println("---Results---");
-        System.out.println("Total games: " + totalGames);
-        System.out.println("Player game wins: " + playerWins);
-        System.out.println("Computer game wins: " + computerWins);
-        System.out.println("Player won " + formatter.format((double) playerWins / totalGames) + "%");
-        System.out.println("Computer won " + formatter.format((double)computerWins/totalGames) + "%");
-        System.out.println("Elapsed time: \nMinutes: " + minutes + "\nSeconds: " + seconds + "\nMilliseconds: " + milliseconds);
     }
 
 }//end class
